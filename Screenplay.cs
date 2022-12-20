@@ -51,7 +51,7 @@ public class Screenplay : MonoBehaviour
     ///Properties in pPos that exceed the properties in pLimitPos would change its value to the value in pLimitPos respective property
     ///</summary>
     ///<param name="pDirection">if pDirection is true than it returns true if the postion property is bigger than the limit position</param>
-    void RestrainPosLimit(GameObject pGameObj, Vector3 pPos, Vector3 pLimitPos, bool pDirection, OnPosLimitSurpass pOnPosLimitSurpass)
+    public void RestrainPosLimit(GameObject pGameObj, Vector3 pPos, Vector3 pLimitPos, bool pDirection, OnPosLimitSurpass pOnPosLimitSurpass)
     {
         float minimizer = pDirection ? -Time.deltaTime : Time.deltaTime;
         bool changed = false;
@@ -73,7 +73,7 @@ public class Screenplay : MonoBehaviour
         }
     }
 
-    delegate void OnPosLimitSurpass ();
+    public delegate void OnPosLimitSurpass ();
 
 
     public void ShowSpeech (Speech pSpeech)
@@ -85,28 +85,34 @@ public class Screenplay : MonoBehaviour
         this.dialoguePanel.SetActive(true);
         if (pSpeech.prevSpeech != null)
         {
-            this.prevMessage.SetActive(true);
-        }
-        else
-        {
-            this.prevMessage.SetActive(false);
-        }
-        if (pSpeech.nextSpeech != null)
-        {
-            this.onClick = ()=>{
-                this.ShowSpeech(pSpeech.nextSpeech);Debug.Log("ji1");
+            this.showPrevSpeech = () => {
+                this.ShowSpeech(pSpeech.prevSpeech);
             };
         }
         else
         {
-            this.onClick = () => {
+            this.showPrevSpeech = () => {
+                this.dialoguePanel.SetActive(false);
+                this.controls.SetActive(true);
+            };
+        }
+        if (pSpeech.nextSpeech != null)
+        {
+            this.showNextSpeech = ()=>{
+                this.ShowSpeech(pSpeech.nextSpeech);
+            };
+        }
+        else
+        {
+            this.showNextSpeech = () => {
                 this.dialoguePanel.SetActive(false);
                 this.controls.SetActive(true);
             };
         }
     }
-    public Event showNextSpeech;
-    public void OnClick () {Debug.Log("hola"); this.onClick();}
-    public delegate void Clicked();
-    public Clicked onClick;
+    public delegate void method();
+    public method showNextSpeech;
+    public method showPrevSpeech;
+    public void ShowPrevSpeech() {this.showPrevSpeech();}
+    public void ShowNextSpeech () {this.showNextSpeech();}
 }

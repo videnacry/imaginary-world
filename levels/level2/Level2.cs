@@ -7,7 +7,7 @@ public class Level2 : Level
     // Start is called before the first frame update
     void Start()
     {
-
+        this.InitQuestDialogue();
     }
 
     // Update is called once per frame

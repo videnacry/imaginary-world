@@ -11,7 +11,7 @@ public class Level1 : Level
     public Speech rightTopFrontLimitSurpass;
     void Start()
     {
-
+        this.InitQuestDialogue();
     }
 
     // Update is called once per frame
