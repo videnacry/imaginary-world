@@ -4,7 +4,7 @@ using UnityEngine;
 
 public class MoveRight : MonoBehaviour
 {
-    public PlayerController player;
+    public Screenplay screenplay;
     // Start is called before the first frame update
     void Start()
     {
@@ -19,6 +19,6 @@ public class MoveRight : MonoBehaviour
 
     private void OnMouseDrag()
     {
-        player.MoveRight();
+        this.screenplay.player.MoveRight();
     }
 }

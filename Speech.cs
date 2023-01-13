@@ -1,5 +1,4 @@
 using UnityEngine;
-using UnityEngine.UI;
 
 [System.Serializable]
 public class Speech 
@@ -9,6 +8,7 @@ public class Speech
     public string message;
     public Speech prevSpeech;
     public Speech nextSpeech;
+    public System.Action action;
 
     public Speech (Sprite pIcon, string pAuthor, string pMessage)
     {

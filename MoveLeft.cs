@@ -5,7 +5,7 @@ using UnityEngine;
 public class MoveLeft : MonoBehaviour
 {
     // Start is called before the first frame update
-    public PlayerController player;
+    public Screenplay screenplay;
     void Start()
     {
         
@@ -18,6 +18,6 @@ public class MoveLeft : MonoBehaviour
     }
 
     private void OnMouseDrag(){
-        player.MoveLeft();
+        this.screenplay.player.MoveLeft();
     }
 }

@@ -18,15 +18,14 @@ public class Screenplay : MonoBehaviour
 
     public GameObject controls;
 
+    #region
     public Level[] levels;
     public System.Int16 levelIdx;
-
-    //fields that would change pending on the current level of levels field on use
-    #region
     public Level currentLevel;
     #endregion
 
-    public GameObject player;
+    public PlayerController player;
+    public GameObject cameraAiming;
     
     // Start is called before the first frame update
     void Awake() 
@@ -37,21 +36,21 @@ public class Screenplay : MonoBehaviour
     void Start()
     {
         this.currentLevel = this.levels[0];
-        this.StartCoroutine(this.currentLevel.Init());
+        this.currentLevel.Init();
     }
     
     // Update is called once per frame
     void Update()
     {
-        this.RestrainPosLimit(this.player, this.player.transform.position, this.currentLevel.rightTopFrontLimit, true, this.currentLevel.OnRightTopFrontLimitSurpass);
-        this.RestrainPosLimit(this.player, this.player.transform.position, this.currentLevel.leftBottomBackLimit, false, this.currentLevel.OnLeftBottomBackLimitSurpass);
+        this.RestrainPosLimit(this.player.gameObject, this.player.transform.position, this.currentLevel.rightTopFrontLimit, true, this.currentLevel.OnRightTopFrontLimitSurpass);
+        this.RestrainPosLimit(this.player.gameObject, this.player.transform.position, this.currentLevel.leftBottomBackLimit, false, this.currentLevel.OnLeftBottomBackLimitSurpass);
     }
 
     ///<summary>
     ///Properties in pPos that exceed the properties in pLimitPos would change its value to the value in pLimitPos respective property
     ///</summary>
     ///<param name="pDirection">if pDirection is true than it returns true if the postion property is bigger than the limit position</param>
-    public void RestrainPosLimit(GameObject pGameObj, Vector3 pPos, Vector3 pLimitPos, bool pDirection, OnPosLimitSurpass pOnPosLimitSurpass)
+    public void RestrainPosLimit(GameObject pGameObj, Vector3 pPos, Vector3 pLimitPos, bool pDirection, System.Action pOnPosLimitSurpass)
     {
         float minimizer = pDirection ? -Time.deltaTime : Time.deltaTime;
         bool changed = false;
@@ -73,8 +72,6 @@ public class Screenplay : MonoBehaviour
         }
     }
 
-    public delegate void OnPosLimitSurpass ();
-
 
     public void ShowSpeech (Speech pSpeech)
     {
@@ -92,6 +89,7 @@ public class Screenplay : MonoBehaviour
         else
         {
             this.showPrevSpeech = () => {
+                if (pSpeech.action != null) pSpeech.action();
                 this.dialoguePanel.SetActive(false);
                 this.controls.SetActive(true);
             };
@@ -105,14 +103,14 @@ public class Screenplay : MonoBehaviour
         else
         {
             this.showNextSpeech = () => {
+                if (pSpeech.action != null) pSpeech.action();
                 this.dialoguePanel.SetActive(false);
                 this.controls.SetActive(true);
             };
         }
     }
-    public delegate void method();
-    public method showNextSpeech;
-    public method showPrevSpeech;
+    public System.Action showNextSpeech;
+    public System.Action showPrevSpeech;
     public void ShowPrevSpeech() {this.showPrevSpeech();}
     public void ShowNextSpeech () {this.showNextSpeech();}
 }
